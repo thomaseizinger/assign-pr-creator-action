@@ -31,5 +31,6 @@ async function run() {
 }
 
 run().catch(e => {
-  process.stdout.write(`##[error]Failed to assign PR to author: ${e.message}`)
+  process.stdout.write(`##[error]Failed to assign PR to author: ${e.message}`);
+  process.exit(1)
 });
