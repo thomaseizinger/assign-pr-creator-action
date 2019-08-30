@@ -1,4 +1,4 @@
-import {buildAddAssigneesPayload} from "../src/buildPayload";
+import { buildAddAssigneesPayload } from "../src/buildPayload";
 import event from "./event.json";
 
 describe("buildPayload", function() {

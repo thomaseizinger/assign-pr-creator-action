@@ -1,13 +1,11 @@
 export interface AddAssigneesRequestData {
-  url: string,
+  url: string;
   body: {
-    assignees: string[]
-  }
+    assignees: string[];
+  };
 }
 
-export function buildAddAssigneesPayload(
-  event: any
-): AddAssigneesRequestData {
+export function buildAddAssigneesPayload(event: any): AddAssigneesRequestData {
   if (!event.repository) {
     throw new Error("repository not given in event payload");
   }
