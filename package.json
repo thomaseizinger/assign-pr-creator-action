@@ -5,6 +5,7 @@
   "description": "Automatically assign PRs to their authors",
   "main": "dist/main.js",
   "scripts": {
+    "build": "webpack",
     "test": "jest",
     "format": "prettier --write **/*.{js,ts,json,yml}",
     "format-check": "prettier --check **/*.{js,ts,json,yml}"
@@ -19,6 +20,7 @@
     "setup"
   ],
   "author": "thomaseizinger",
+  "license": "MIT",
   "dependencies": {
     "typed-rest-client": "^1.5.0"
   },
