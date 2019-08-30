@@ -1,37 +1,28 @@
-import {context, GitHub} from "@actions/github/lib/github";
+import { GitHub } from "@actions/github/lib/github";
+import { error, getInput } from "@actions/core/lib/core";
+import { promises as fs } from "fs";
+import { buildAddAssigneesPayload } from "./buildPayload";
 
 async function run() {
-  let token = process.env["INPUT_REPO_TOKEN"];
+  let eventPath = process.env.GITHUB_EVENT_PATH;
 
-  if (!token) {
-    throw new Error("Input 'repo-token' is not specified");
+  if (!eventPath) {
+    throw new Error("Event is not present");
   }
 
-  const { repo, owner, number: pullRequest } = context.issue;
+  let eventBuffer = await fs.readFile(eventPath, {
+    encoding: "utf8"
+  });
+  let event = JSON.parse(eventBuffer);
 
-  if (!pullRequest) {
-    throw new Error("Unable to determine pull request from context");
-  }
+  let payload = buildAddAssigneesPayload(event);
 
+  let token = getInput("repo-token", { required: true });
   let gitHubClient = new GitHub(token);
 
-  let prReference = {
-    issue_number: pullRequest,
-    owner: owner,
-    repo: repo
-  };
-
-  let fullPullRequest = await gitHubClient.issues.get(prReference);
-  let author = fullPullRequest.data.user.login;
-
-  console.log("Assigning pull request %d to %s", pullRequest, author);
-
-  await gitHubClient.issues.addAssignees({
-    ...prReference,
-    assignees: [author]
-  });
+  await gitHubClient.issues.addAssignees(payload);
 }
 
 run().catch(e => {
-  process.stdout.write(`##[error]Failed to assign PR to author: ${e.message}`);
+  error(`Failed to assign PR to author: ${e.message}`);
 });
