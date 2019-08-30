@@ -1,9 +1,13 @@
-import { IssuesAddAssigneesParams } from "@octokit/rest";
-import { WebhookPayload } from "@actions/github/lib/interfaces";
+export interface AddAssigneesRequestData {
+  url: string,
+  body: {
+    assignees: string[]
+  }
+}
 
 export function buildAddAssigneesPayload(
-  event: WebhookPayload
-): IssuesAddAssigneesParams {
+  event: any
+): AddAssigneesRequestData {
   if (!event.repository) {
     throw new Error("repository not given in event payload");
   }
@@ -21,9 +25,9 @@ export function buildAddAssigneesPayload(
   }
 
   return {
-    repo: event.repository.name,
-    owner: event.repository.owner.login,
-    issue_number: event.pull_request.number,
-    assignees: [event.pull_request.user.login]
+    url: `/repos/${event.repository.owner.login}/${event.repository.name}/issues/${event.pull_request.number}/assignees`,
+    body: {
+      assignees: [event.pull_request.user.login]
+    }
   };
 }

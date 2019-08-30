@@ -1,13 +1,17 @@
-import { GitHub } from "@actions/github/lib/github";
-import { error, getInput } from "@actions/core/lib/core";
 import { promises as fs } from "fs";
 import { buildAddAssigneesPayload } from "./buildPayload";
+import {RestClient} from "typed-rest-client/RestClient";
+import {BasicCredentialHandler} from "typed-rest-client/Handlers";
 
 async function run() {
   let eventPath = process.env.GITHUB_EVENT_PATH;
-
   if (!eventPath) {
     throw new Error("Event is not present");
+  }
+
+  let repoToken = process.env.INPUT_REPO_TOKEN;
+  if (!repoToken) {
+    throw new Error("Input `repo-token` not provided")
   }
 
   let eventBuffer = await fs.readFile(eventPath, {
@@ -17,12 +21,15 @@ async function run() {
 
   let payload = buildAddAssigneesPayload(event);
 
-  let token = getInput("repo-token", { required: true });
-  let gitHubClient = new GitHub(token);
+  let client = new RestClient("assign-pr-creator-action", "https://api.github.com", [new BasicCredentialHandler("token", repoToken)], {
+    headers: {
+      "Accept": "application/vnd.github.v3+json",
+    }
+  });
 
-  await gitHubClient.issues.addAssignees(payload);
+  await client.create(payload.url, payload.body);
 }
 
 run().catch(e => {
-  error(`Failed to assign PR to author: ${e.message}`);
+  process.stdout.write(`##[error]Failed to assign PR to author: ${e.message}`)
 });
