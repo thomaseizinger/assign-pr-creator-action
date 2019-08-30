@@ -9,7 +9,7 @@ async function run() {
     throw new Error("Event is not present");
   }
 
-  let repoToken = process.env.INPUT_REPO_TOKEN;
+  let repoToken = process.env["INPUT_REPO-TOKEN"];
   if (!repoToken) {
     throw new Error("Input `repo-token` not provided")
   }
