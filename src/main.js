@@ -1,16 +1,16 @@
-import { error, getInput } from "@actions/core/lib/core";
-import { context, GitHub } from "@actions/github/lib/github";
+const core = require("@actions/core");
+const github = require("@actions/github");
 
 async function run() {
-  let token = getInput("repo-token", { required: true });
+  let token = core.getInput("repo-token", { required: true });
 
-  const { repo, owner, number: pullRequest } = context.issue;
+  const { repo, owner, number: pullRequest } = github.context.issue;
 
   if (!pullRequest) {
     throw new Error("Unable to determine pull request from context");
   }
 
-  let gitHubClient = new GitHub(token);
+  let gitHubClient = new github.GitHub(token);
 
   let prReference = {
     issue_number: pullRequest,
@@ -29,4 +29,4 @@ async function run() {
   });
 }
 
-run().catch(error);
+run().catch(core.error);

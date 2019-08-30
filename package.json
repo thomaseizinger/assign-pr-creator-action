@@ -24,5 +24,8 @@
   },
   "devDependencies": {
     "prettier": "^1.17.1"
+  },
+  "toolchain": {
+    "node": "12.9.1"
   }
 }
