@@ -29,5 +29,5 @@ async function run() {
 }
 
 run().catch(e => {
-  console.log("##[error]Error while trying to assign PR to author", e);
+  process.stdout._write("##[error]Error while trying to assign PR to author");
 });
