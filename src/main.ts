@@ -3,6 +3,10 @@ import {context, GitHub} from "@actions/github/lib/github";
 async function run() {
   let token = process.env["INPUT_REPO_TOKEN"];
 
+  if (!token) {
+    throw new Error("Input 'repo-token' is not specified");
+  }
+
   const { repo, owner, number: pullRequest } = context.issue;
 
   if (!pullRequest) {
@@ -29,5 +33,5 @@ async function run() {
 }
 
 run().catch(e => {
-  process.stdout._write("##[error]Error while trying to assign PR to author");
+  process.stdout.write(`##[error]Failed to assign PR to author: ${e.message}`);
 });
