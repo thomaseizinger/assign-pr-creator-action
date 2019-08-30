@@ -6,4 +6,4 @@ inputs:
     description: 'The GITHUB_TOKEN secret'
 runs:
   using: 'node12'
-  main: 'src/main.js'
+  main: 'dist/main.js'

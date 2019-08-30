@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "description": "Automatically assign PRs to their authors",
-  "main": "src/main.js",
+  "main": "dist/main.js",
   "scripts": {
-    "format": "prettier --write **/*.js",
-    "format-check": "prettier --check **/*.js"
+    "build": "parcel build src/main.ts",
+    "format": "prettier --write src/**/*.js",
+    "format-check": "prettier --check src/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -23,9 +24,13 @@
     "@actions/github": "^1.0.0"
   },
   "devDependencies": {
-    "prettier": "^1.17.1"
+    "@types/node": "^12.7.3",
+    "parcel-bundler": "^1.12.3",
+    "prettier": "^1.17.1",
+    "typescript": "^3.6.2"
   },
   "toolchain": {
-    "node": "12.9.1"
+    "node": "12.9.1",
+    "yarn": "1.17.3"
   }
 }

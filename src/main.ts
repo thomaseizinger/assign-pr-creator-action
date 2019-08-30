@@ -1,16 +1,15 @@
-const core = require("@actions/core");
-const github = require("@actions/github");
+import {context, GitHub} from "@actions/github/lib/github";
 
 async function run() {
-  let token = core.getInput("repo-token", { required: true });
+  let token = process.env["INPUT_REPO_TOKEN"];
 
-  const { repo, owner, number: pullRequest } = github.context.issue;
+  const { repo, owner, number: pullRequest } = context.issue;
 
   if (!pullRequest) {
     throw new Error("Unable to determine pull request from context");
   }
 
-  let gitHubClient = new github.GitHub(token);
+  let gitHubClient = new GitHub(token);
 
   let prReference = {
     issue_number: pullRequest,
@@ -29,4 +28,6 @@ async function run() {
   });
 }
 
-run().catch(core.error);
+run().catch(e => {
+  console.log("##[error]Error while trying to assign PR to author", e);
+});
