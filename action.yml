@@ -1,0 +1,9 @@
+name: 'Pull Request Assigner'
+description: 'Automatically assign pull requests to the person that opened it'
+author: 'thomaseizinger'
+inputs:
+  repo-token:
+    description: 'The GITHUB_TOKEN secret'
+runs:
+  using: 'node12'
+  main: 'src/main.js'
